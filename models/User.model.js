@@ -7,7 +7,10 @@ const userSchema = new Schema(
       required: [true, 'Name is required.'],
       unique: [true, 'Name is already taken.'],
       trim: true
-    }
+    },
+    imageUrl: {
+      type: String
+    },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`    
