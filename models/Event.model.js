@@ -6,8 +6,6 @@ const eventSchema = new Schema(
         name: {
             type: String,
             required: [true, 'Name is required.'],
-            unique: true,
-            lowercase: true,
             trim: true
         },
         date: {
@@ -16,11 +14,13 @@ const eventSchema = new Schema(
         },
         description: {
             type: String,
-            required: [true, 'Description is required.']
+            required: [true, 'Description is required.'],
+            trim: true
         },
         location: {
             type: String,
-            required: [true, 'Location is required.']
+            required: [true, 'Location is required.'],
+            trim: true
         },
         participants: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
