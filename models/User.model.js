@@ -9,7 +9,8 @@ const userSchema = new Schema(
       trim: true
     },
     imageUrl: {
-      type: String
+      type: String,
+      default: 'https://res.cloudinary.com/marcelusironhack/image/upload/v1710765987/neutralPNG_p60p83.png'
     },
   },
   {
