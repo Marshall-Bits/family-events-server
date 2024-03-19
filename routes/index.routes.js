@@ -71,6 +71,16 @@ router.put("/events/:id", (req, res, next) => {
     });
 });
 
+router.delete("/events/:id", (req, res, next) => {
+  Event.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.status(200).json({ message: "Event deleted" });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 router.post("/events/:id/participants", (req, res, next) => {
   Event.findByIdAndUpdate(req.params.id, { $push: { participants: req.body.userId } }, { new: true })
     .then((event) => {
