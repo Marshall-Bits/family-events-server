@@ -38,7 +38,9 @@ router.post("/events", (req, res, next) => {
 
 router.get("/events", (req, res, next) => {
   const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
   Event.find({ date: { $gte: currentDate } })
+    .sort({ date: 1 })
     .populate('participants')
     .then((events) => {
       res.status(200).json(events);
