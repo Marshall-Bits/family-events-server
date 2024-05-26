@@ -32,6 +32,8 @@ router.post("/events", (req, res, next) => {
       res.status(201).json(event);
     })
     .catch((err) => {
+      console.error("Error creating event", req.body);
+      console.log(err);
       res.status(500).json(err);
     });
 });
@@ -41,7 +43,7 @@ router.get("/events", (req, res, next) => {
   currentDate.setHours(0, 0, 0, 0);
   Event.find({ date: { $gte: currentDate } })
     .sort({ date: 1 })
-    .populate('participants')
+    .populate("participants")
     .then((events) => {
       res.status(200).json(events);
     })
@@ -52,7 +54,7 @@ router.get("/events", (req, res, next) => {
 
 router.get("/events/:id", (req, res, next) => {
   Event.findById(req.params.id)
-    .populate('participants')
+    .populate("participants")
     .then((event) => {
       res.status(200).json(event);
     })
@@ -82,7 +84,11 @@ router.delete("/events/:id", (req, res, next) => {
 });
 
 router.post("/events/:id/participants", (req, res, next) => {
-  Event.findByIdAndUpdate(req.params.id, { $push: { participants: req.body.userId } }, { new: true })
+  Event.findByIdAndUpdate(
+    req.params.id,
+    { $push: { participants: req.body.userId } },
+    { new: true }
+  )
     .then((event) => {
       res.status(200).json(event);
     })
@@ -92,7 +98,11 @@ router.post("/events/:id/participants", (req, res, next) => {
 });
 
 router.delete("/events/:id/participants/:userId", (req, res, next) => {
-  Event.findByIdAndUpdate(req.params.id, { $pull: { participants: req.params.userId } }, { new: true })
+  Event.findByIdAndUpdate(
+    req.params.id,
+    { $pull: { participants: req.params.userId } },
+    { new: true }
+  )
     .then((event) => {
       res.status(200).json(event);
     })
