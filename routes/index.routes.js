@@ -27,6 +27,12 @@ router.post("/users", (req, res, next) => {
 });
 
 router.post("/events", (req, res, next) => {
+  const { date, participants, description, location, name } = req.body;
+
+  if (!date || !participants || !description || !location || !name) {
+    console.log("Missing fields");
+  }
+
   Event.create(req.body)
     .then((event) => {
       res.status(201).json(event);
