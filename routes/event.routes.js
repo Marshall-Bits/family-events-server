@@ -1,32 +1,8 @@
 const router = require("express").Router();
 const Event = require("../models/Event.model");
-const User = require("../models/User.model");
 
-router.get("/", (req, res, next) => {
-  res.json("All good in here");
-});
 
-router.get("/users", (req, res, next) => {
-  User.find()
-    .then((users) => {
-      res.status(200).json(users);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
-
-router.post("/users", (req, res, next) => {
-  User.create(req.body)
-    .then((user) => {
-      res.status(201).json(user);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
-
-router.post("/events", (req, res, next) => {
+router.post("", (req, res, next) => {
   const { date, participants, description, location, name } = req.body;
 
   if (!date || !participants || !description || !location || !name) {
@@ -44,7 +20,7 @@ router.post("/events", (req, res, next) => {
     });
 });
 
-router.get("/events", (req, res, next) => {
+router.get("/", (req, res, next) => {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
   Event.find({ date: { $gte: currentDate } })
@@ -58,7 +34,7 @@ router.get("/events", (req, res, next) => {
     });
 });
 
-router.get("/events/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   Event.findById(req.params.id)
     .populate("participants")
     .then((event) => {
@@ -69,7 +45,7 @@ router.get("/events/:id", (req, res, next) => {
     });
 });
 
-router.put("/events/:id", (req, res, next) => {
+router.put("/:id", (req, res, next) => {
   Event.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((event) => {
       res.status(200).json(event);
@@ -79,7 +55,7 @@ router.put("/events/:id", (req, res, next) => {
     });
 });
 
-router.delete("/events/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   Event.findByIdAndDelete(req.params.id)
     .then(() => {
       res.status(200).json({ message: "Event deleted" });
@@ -89,7 +65,7 @@ router.delete("/events/:id", (req, res, next) => {
     });
 });
 
-router.post("/events/:id/participants", (req, res, next) => {
+router.post("/:id/participants", (req, res, next) => {
   Event.findByIdAndUpdate(
     req.params.id,
     { $push: { participants: req.body.userId } },
@@ -103,7 +79,7 @@ router.post("/events/:id/participants", (req, res, next) => {
     });
 });
 
-router.delete("/events/:id/participants/:userId", (req, res, next) => {
+router.delete("/:id/participants/:userId", (req, res, next) => {
   Event.findByIdAndUpdate(
     req.params.id,
     { $pull: { participants: req.params.userId } },
