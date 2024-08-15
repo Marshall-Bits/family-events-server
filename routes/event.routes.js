@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Event = require("../models/Event.model");
 
-
 router.post("", (req, res, next) => {
   const { date, participants, description, location, name } = req.body;
 
@@ -83,6 +82,34 @@ router.delete("/:id/participants/:userId", (req, res, next) => {
   Event.findByIdAndUpdate(
     req.params.id,
     { $pull: { participants: req.params.userId } },
+    { new: true }
+  )
+    .then((event) => {
+      res.status(200).json(event);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.post("/:id/extra-participants", (req, res, next) => {
+  Event.findByIdAndUpdate(
+    req.params.id,
+    { $push: { extraParticipants: req.body.name } },
+    { new: true }
+  )
+    .then((event) => {
+      res.status(200).json(event);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.delete("/:id/extra-participants/:name", (req, res, next) => {
+  Event.findByIdAndUpdate(
+    req.params.id,
+    { $pull: { extraParticipants: req.params.name } },
     { new: true }
   )
     .then((event) => {
