@@ -93,6 +93,12 @@ router.delete("/:id/participants/:userId", (req, res, next) => {
 });
 
 router.post("/:id/extra-participants", (req, res, next) => {
+  
+  if (!req.body.name) {
+    res.status(400).json({ error: "Name is required" });
+    return;
+  }
+
   Event.findByIdAndUpdate(
     req.params.id,
     { $push: { extraParticipants: req.body.name } },
